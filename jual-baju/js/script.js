@@ -1,5 +1,6 @@
+/* data.js - konstanta, data awal, dan fungsi bantu dasar */
 const $ = s => document.querySelector(s);
-const VER = 2;
+const VER = 3;
 const SZ = ['S', 'M', 'L', 'XL'];
 const KAT = ['Kaos', 'Kemeja', 'Batik', 'Jaket', 'Sweater', 'Celana', 'Rok', 'Dress'];
 const EMO = { Kaos: '👕', Kemeja: '👔', Batik: '👘', Jaket: '🧥', Sweater: '🧶', Celana: '👖', Rok: '👗', Dress: '👗' };
@@ -31,15 +32,31 @@ function seed() {
     ['Celana Kargo Panjang', 'Celana', 189000, '#8C8062', 'Celana kargo dengan banyak kantong, bahan kuat dan potongan lurus yang rapi.'],
     ['Rok Plisket Midi', 'Rok', 119000, '#C98B9B', 'Rok plisket panjang sebetis dengan pinggang karet, jatuh cantik dan mudah dipadukan.'],
     ['Dress Floral Casual', 'Dress', 205000, '#E2A4A0', 'Dress motif bunga berbahan rayon adem, cocok untuk jalan-jalan dan acara santai.'],
-    ['Kaos Polo Pique', 'Kaos', 99000, '#3F6B5A', 'Polo berbahan pique yang menyerap keringat, kerahnya tetap rapi setelah dicuci.']
+    ['Kaos Polo Pique', 'Kaos', 99000, '#3F6B5A', 'Polo berbahan pique yang menyerap keringat, kerahnya tetap rapi setelah dicuci.'],
+    ['Kaos Lengan Panjang Basic', 'Kaos', 79000, '#7E9BB5', 'Kaos lengan panjang katun yang lembut, cocok dipakai sendiri atau sebagai pelapis.'],
+    ['Kaos Henley Katun', 'Kaos', 95000, '#B7A58C', 'Kaos kancing depan berbahan katun, tampil santai tetapi tetap berkarakter.'],
+    ['Kaos Sablon Vintage', 'Kaos', 92000, '#D98B5F', 'Sablon bergaya retro dengan bahan tebal yang tidak mudah melar.'],
+    ['Kemeja Oxford Biru', 'Kemeja', 169000, '#6F93C0', 'Oxford berbahan tebal dan rapi, pilihan aman untuk kuliah maupun kerja.'],
+    ['Kemeja Denim Lengan Pendek', 'Kemeja', 175000, '#4A6A8F', 'Denim ringan berlengan pendek, kuat dan nyaman untuk cuaca hangat.'],
+    ['Kemeja Kotak Casual', 'Kemeja', 149000, '#A55A4A', 'Motif kotak klasik dengan bahan katun adem, mudah dipadukan dengan celana apa saja.'],
+    ['Batik Pria Motif Mega Mendung', 'Batik', 195000, '#2F5D8C', 'Batik motif mega mendung berwarna biru, cocok untuk acara resmi dan kondangan.'],
+    ['Batik Wanita Tunik', 'Batik', 185000, '#9A4E6B', 'Tunik batik berpotongan longgar dengan bahan katun halus yang menyerap keringat.'],
+    ['Batik Couple Lengan Pendek', 'Batik', 169000, '#8A6A3A', 'Batik berpasangan untuk acara keluarga, tersedia dalam ukuran lengkap.'],
+    ['Jaket Varsity Wol', 'Jaket', 289000, '#7A2E3A', 'Jaket varsity dengan lengan kontras dan kancing press, tampilan sporty yang klasik.'],
+    ['Jaket Windbreaker Ringan', 'Jaket', 199000, '#3B7C8C', 'Windbreaker tipis penahan angin, mudah dilipat dan dibawa ke mana saja.'],
+    ['Sweater Turtleneck Rajut', 'Sweater', 179000, '#C7B8A0', 'Rajut berkerah tinggi yang hangat, nyaman untuk ruangan ber-AC atau cuaca dingin.'],
+    ['Sweater Zipper Hoodie', 'Sweater', 219000, '#4F5D6B', 'Hoodie berresleting dengan lapisan fleece, praktis dipakai dan dilepas.'],
+    ['Celana Training Panjang', 'Celana', 129000, '#2E3A47', 'Celana training dengan bahan elastis dan pinggang karet, nyaman untuk olahraga.'],
+    ['Celana Kulot Linen', 'Celana', 155000, '#C9B896', 'Kulot linen lebar yang jatuh nyaman, adem dipakai sepanjang hari.'],
+    ['Rok Jeans A-Line', 'Rok', 139000, '#3D5A7A', 'Rok jeans potongan A-line dengan kancing depan, mudah dipadukan dengan kaos.'],
+    ['Rok Span Panjang', 'Rok', 109000, '#6E5A66', 'Rok span panjang berbahan melar, rapi untuk kuliah dan acara semi formal.'],
+    ['Dress Kemeja Midi', 'Dress', 225000, '#8FB0A8', 'Dress model kemeja panjang sebetis dengan ikat pinggang, tampil rapi dan anggun.']
   ];
   return {
     ver: VER, seq: 100, me: null, orders: [],
     users: [{ id: 1, nama: 'Admin Toko', email: 'admin@toko.com', hp: '081200000000', pass: 'admin123', role: 'admin', aktif: true }],
-    products: P.map((p, i) => ({
-      id: i + 1, nama: p[0], kat: p[1], harga: p[2], emoji: EMO[p[1]], warna: p[3], desk: p[4],
-      stok: { S: 3 + (i % 4) * 2, M: 6 + (i % 3) * 2, L: 6 + (i % 4), XL: 2 + (i % 3) }, aktif: true
-    }))
+    products: P.map((p, i) => ({ id: i + 1, nama: p[0], kat: p[1], harga: p[2], emoji: EMO[p[1]], warna: p[3], desk: p[4],
+      stok: { S: 3 + (i % 4) * 2, M: 6 + (i % 3) * 2, L: 6 + (i % 4), XL: 2 + (i % 3) }, aktif: true }))
   };
 }
 
@@ -68,7 +85,7 @@ function expire() { // pesanan lewat batas bayar dibatalkan otomatis
   db.orders.forEach(o => { if (o.status === ST[0] && Date.now() > o.batas) { prod(o.pid).stok[o.uk] += o.qty; o.status = ST[5]; } });
   save();
 }
-
+/* ui.js - menu navigasi dan router */
 function nav() {
   const u = me(); let h = '<a href="#/">Beranda</a><a href="#/katalog">Katalog</a>';
   if (!u) h += '<a href="#/login">Masuk</a><a class="btn" href="#/daftar">Daftar</a>';
@@ -89,18 +106,22 @@ function go() {
 addEventListener('hashchange', go);
 
 
+/* akun.js - registrasi, login, profil */
 function logout() { db.me = null; save(); location.hash = '#/login'; return false; }
 R.daftar = () => show(`<div class="panel narrow"><h1>Daftar akun</h1><form onsubmit="return daftar(this)">
   <label>Nama<input name="nama"></label><label>Email<input name="email" type="email"></label>
-  <label>Nomor HP<input name="hp" placeholder="08xxxxxxxxxx"></label><label>Kata sandi<input name="pass" type="password"></label>
+  <label>Nomor HP<input name="hp" placeholder="08xxxxxxxxxx"></label>
+  <label>Alamat pembeli<textarea name="alamat" rows="3" placeholder="Jalan, nomor rumah, kecamatan, kota"></textarea></label>
+  <label>Kata sandi<input name="pass" type="password"></label>
   <button class="btn">Buat akun</button></form><p>Sudah punya akun? <a href="#/login">Masuk</a></p></div>`);
 function daftar(f) {
   if (f.nama.value.trim().length < 3) return toast('Nama minimal 3 karakter'), false;
   if (!/^\S+@\S+\.\S+$/.test(f.email.value)) return toast('Format email tidak valid'), false;
   if (!/^08\d{8,11}$/.test(f.hp.value)) return toast('Nomor HP tidak valid. Contoh: 081234567890'), false;
+  if (f.alamat.value.trim().length < 10) return toast('Alamat minimal 10 karakter'), false;
   if (f.pass.value.length < 6) return toast('Kata sandi minimal 6 karakter'), false;
   if (db.users.some(u => u.email === f.email.value)) return toast('Email sudah terdaftar'), false;
-  db.users.push({ id: db.seq++, nama: f.nama.value.trim(), email: f.email.value, hp: f.hp.value, pass: f.pass.value, role: 'pelanggan', aktif: true });
+  db.users.push({ id: db.seq++, nama: f.nama.value.trim(), email: f.email.value, hp: f.hp.value, alamat: f.alamat.value.trim(), pass: f.pass.value, role: 'pelanggan', aktif: true });
   save(); toast('Akun dibuat. Silakan masuk.'); location.hash = '#/login'; return false;
 }
 R.login = () => show(`<div class="panel narrow"><h1>Masuk</h1><form onsubmit="return login(this)">
@@ -117,7 +138,8 @@ R.profil = () => {
   const u = need(); if (!u) return;
   show(`<h1>Profil</h1><div class="panel narrow"><form onsubmit="return simpanProfil(this)">
   <label>Nama<input name="nama" value="${esc(u.nama)}"></label><label>Email<input value="${esc(u.email)}" disabled></label>
-  <label>Nomor HP<input name="hp" value="${esc(u.hp)}"></label><button class="btn">Simpan profil</button></form></div>
+  <label>Nomor HP<input name="hp" value="${esc(u.hp)}"></label>
+  <label>Alamat pembeli<textarea name="alamat" rows="3">${esc(u.alamat || '')}</textarea></label><button class="btn">Simpan profil</button></form></div>
   <div class="panel narrow"><h2>Ganti kata sandi</h2><form onsubmit="return gantiPass(this)">
   <label>Kata sandi lama<input name="lama" type="password"></label><label>Kata sandi baru<input name="baru" type="password"></label>
   <button class="btn">Ganti kata sandi</button></form></div>`);
@@ -125,7 +147,8 @@ R.profil = () => {
 function simpanProfil(f) {
   if (f.nama.value.trim().length < 3) return toast('Nama minimal 3 karakter'), false;
   if (!/^08\d{8,11}$/.test(f.hp.value)) return toast('Nomor HP tidak valid'), false;
-  const u = me(); u.nama = f.nama.value.trim(); u.hp = f.hp.value; save(); toast('Profil disimpan'); return false;
+  if (f.alamat.value.trim().length < 10) return toast('Alamat minimal 10 karakter'), false;
+  const u = me(); u.nama = f.nama.value.trim(); u.hp = f.hp.value; u.alamat = f.alamat.value.trim(); save(); toast('Profil disimpan'); return false;
 }
 function gantiPass(f) {
   const u = me();
@@ -133,7 +156,7 @@ function gantiPass(f) {
   if (f.baru.value.length < 6) return toast('Kata sandi baru minimal 6 karakter'), false;
   u.pass = f.baru.value; save(); f.reset(); toast('Kata sandi diganti'); return false;
 }
-
+/* toko.js - beranda, katalog, detail produk, pesanan, riwayat */
 const EXT = ['jpg', 'jpeg', 'png', 'webp'];
 const slug = t => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const kandidat = p => ['img/produk-' + p.id, 'img/' + slug(p.nama)].flatMap(b => EXT.map(e => b + '.' + e));
@@ -198,13 +221,13 @@ R.produk = id => {
   <form onsubmit="return pesan(this,${p.id})">
   <div class="row2"><label>Ukuran<select name="uk">${SZ.map(z => `<option value="${z}" ${p.stok[z] ? '' : 'disabled'}>${z} (stok ${p.stok[z]})</option>`).join('')}</select></label>
   <label>Jumlah<input type="number" name="qty" value="1" min="1"></label></div>
-  <label>Nomor HP penerima<input name="hp" placeholder="08xxxxxxxxxx"></label>
-  <label>Alamat pengiriman<textarea name="alamat" rows="3" placeholder="Jalan, nomor rumah, kecamatan, kota"></textarea></label>
+  <label>Nomor HP penerima<input name="hp" placeholder="08xxxxxxxxxx" value="${esc(me() ? me().hp : '')}"></label>
+  <label>Alamat pengiriman<textarea name="alamat" rows="3" placeholder="Jalan, nomor rumah, kecamatan, kota">${esc(me() ? me().alamat || '' : '')}</textarea></label>
   <button class="btn block" ${stokTotal(p) ? '' : 'disabled'}>${stokTotal(p) ? 'Buat pesanan' : 'Stok habis'}</button></form></div></div>
   ${rel.length ? `<h2>Produk terkait</h2><div class="grid">${rel.map(card).join('')}</div>` : ''}`);
 };
 
-
+/* ---------- Pemesanan & pembayaran ---------- */
 function pesan(f, pid) {
   const u = me();
   if (!u) { toast('Masuk dulu untuk memesan'); location.hash = '#/login'; return false; }
@@ -252,7 +275,7 @@ R.riwayat = () => {
   ${r.map(o => `<tr><td>#${o.id}</td><td>${o.tgl}</td><td>${esc(prod(o.pid).nama)} (${o.uk}) x${o.qty}</td><td>${rp(o.total)}</td><td>${badge(o.status)}</td><td><a href="#/transaksi/${o.id}">Detail</a></td></tr>`).join('')}</table></div>
   ${r.length ? '' : '<p class="empty">Belum ada transaksi. <a href="#/katalog">Lihat katalog</a></p>'}`);
 };
-
+/* admin.js - dashboard, produk, transaksi, laporan, pengguna */
 const omzet = list => list.filter(o => o.status === ST[2] || o.status === ST[3]).reduce((s, o) => s + o.total, 0);
 R.admin = () => {
   if (!need('admin')) return;
@@ -351,13 +374,13 @@ function laporan() {
 R['admin/user'] = () => {
   if (!need('admin')) return;
   show(`<h1>Kelola pengguna</h1><div class="scroll"><table><tr><th>Nama</th><th>Email</th><th>Peran</th><th>Status</th><th></th></tr>
-  ${db.users.map(u => `<tr><td>${esc(u.nama)}</td><td>${esc(u.email)}</td><td>${u.role}</td><td>${u.aktif ? 'Aktif' : 'Nonaktif'}</td>
+  ${db.users.map(u => `<tr><td>${esc(u.nama)}<br><small>${esc(u.alamat || '-')}</small></td><td>${esc(u.email)}</td><td>${u.role}</td><td>${u.aktif ? 'Aktif' : 'Nonaktif'}</td>
   <td>${u.role === 'admin' ? '' : `<button class="ghost" onclick="togU(${u.id})">${u.aktif ? 'Nonaktifkan' : 'Aktifkan'}</button>`}</td></tr>`).join('')}</table></div>`);
 };
 function togU(id) { const u = db.users.find(x => x.id === id); u.aktif = !u.aktif; save(); go(); }
 
-
-const qrisSrc = () => db.qris || 'img/qris.png';
+/* ---------- Pembayaran QRIS ---------- */
+const qrisSrc = () => db.qris || 'img/qris.jpeg';
 function infoBayar(m, total) {
   $('#infobayar').innerHTML = m === 'QRIS'
     ? `<div class="qris"><b>Scan QRIS untuk membayar</b>
